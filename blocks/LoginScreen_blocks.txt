@@ -1,0 +1,19 @@
+LoginScreen - Blocks (copy step-by-step)
+
+1) Screen.Initialize
+   - call tinyDB_Main.GetValue tag "token" valueIfTagNotThere ""
+   - if result ≠ "" then open another screen "AdminDashboard"
+
+2) btnLogin.Click
+   - set user := txtUsername.Text
+   - set pass := txtPassword.Text
+   - if user = "" OR pass = "" then call notifier.ShowAlert "Username/password required"
+   - else
+       if user = "admin" AND pass = "admin" then
+         call tinyDB_Main.StoreValue tag "token" value "admin_token_v1"
+         open another screen "AdminDashboard"
+       else
+         call notifier.ShowAlert "Invalid credentials. Use admin/admin"
+
+3) btnRegister.Click / btnForgot.Click
+   - call notifier.ShowAlert "Not implemented; use admin/admin"
