@@ -1,0 +1,9 @@
+Components to create (HistoryScreen):
+- Screen: Name = HistoryScreen, Title = "History", BackgroundColor = #071026
+- ListView lvHistory (FillParent)
+- Button btnExportCSV: Text = "Export CSV"
+
+Non-visible:
+- TinyDB tinyDB_Main
+- File file1
+- Notifier notifier
