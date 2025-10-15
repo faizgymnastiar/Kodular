@@ -1,0 +1,25 @@
+HistoryScreen - Blocks (step-by-step)
+
+1) Screen.Initialize
+   - startValue := get start value (when Dashboard opens History, pass deviceId|type)
+   - if startValue is empty:
+       - show a message or load general history by reading tinyDB_Main.GetValue "history_keys"
+   - else:
+       - split startValue by "|" into [deviceId, type]
+       - key := join "history_", deviceId, "_", type
+       - list := tinyDB_Main.GetValue key create empty list
+       - if length(list) = 0 then set lvHistory.Elements to make a list with "No history available"
+       - else set lvHistory.Elements to map each item -> replace "|" with " - " (present as "timestamp - value")
+
+2) btnExportCSV.Click
+   - csv := "timestamp,device,type,value\n"
+   - keys := tinyDB_Main.GetValue "history_keys" create empty list
+   - for each k in keys:
+       - list := tinyDB_Main.GetValue k create empty list
+       - parse k to extract device and type (k is "history_deviceId_type")
+       - for each item in list:
+           - parts := split(item, "|")
+           - ts := parts[1]; val := parts[2]
+           - csv := join csv, ts, ",", device, ",", type, ",", val, "\n"
+   - call file1.SaveFile text csv fileName join "iot_history_", Clock.Now
+   - notifier.ShowAlert "CSV saved (check Downloads)"
