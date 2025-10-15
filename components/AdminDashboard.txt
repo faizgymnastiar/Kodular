@@ -1,0 +1,27 @@
+Components to create (AdminDashboard):
+- Screen: Name = AdminDashboard, Title = "Dashboard", BackgroundColor = #071126
+- HorizontalArrangement TopBar:
+  - Button btnMenu: Text = "☰"
+  - Label lblTitle: Text = "Dashboard", TextColor = #E6F0FF
+- VerticalArrangement drawer: Width = 260px, Visible = false, BackgroundColor = #08243A
+  - Label lblAdminName: Text = "Admin"
+  - Button btnDrawerDashboard: Text = "Dashboard"
+  - Button btnDrawerHistory: Text = "History"
+  - Button btnDrawerSettings: Text = "Settings" (optional)
+  - Button btnDrawerLogout: Text = "Logout"
+- VerticalArrangement mainContent (Scrollable)
+  - For each device create a card (VerticalArrangement) with:
+    - Label lblDevice_<id>  (device name e.g. "device123")
+    - Label lblValue_<id>   (big value, e.g. "25.6 °C")
+    - Label lblTime_<id>    (last update)
+    - HorizontalArrangement:
+      - Button btnOn_<id>
+      - Button btnOff_<id>
+- Canvas chartCanvas (optional) for plotting, Width = FillParent, Height = 200
+
+Non-visible (important):
+- MQTT extension instance: mqttClient (use Paho/Arduino MQTT extension)
+- TinyDB tinyDB_Main (same DB)
+- Notifier notifier
+- Clock clock_refresh (Interval = 5000 ms) — optional for UI refresh
+- File file1 (for export CSV)
