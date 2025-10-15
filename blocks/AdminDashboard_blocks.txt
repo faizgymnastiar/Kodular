@@ -1,0 +1,55 @@
+AdminDashboard - Blocks (step-by-step, prioritized)
+
+-- Variables (create these global vars)
+- baseTopic := "/sistem_iot"
+- mqttConnected := false
+
+1) Screen.Initialize
+   - set mqttClient.ClientID to join "KodularClient_" + (random integer)
+   - call mqttClient.Connect host "broker.hivemq.com" port 1883 username "" password ""
+   - (do not subscribe here; subscribe in mqttClient.Connected event)
+
+2) mqttClient.Connected  (event)
+   - set mqttConnected := true
+   - call mqttClient.Subscribe topic join(baseTopic, "/#")
+   - call notifier.ShowAlert "MQTT connected"
+
+3) mqttClient.ConnectionFailed or mqttClient.Disconnected
+   - set mqttConnected := false
+   - call notifier.ShowAlert "MQTT disconnected"
+
+4) mqttClient.MessageArrived(topic, message)
+   - set parts := split(topic, "/")
+   - determine index of "sistem_iot" in parts (or assume leading slash => deviceId = parts[3])
+     Recommendation: look for first occurrence of "sistem_iot" and then deviceId = parts[index + 1]
+   - set deviceId := that value (e.g., "device123")
+   - if text contains(topic, "sensor") and text contains(topic, "temperature") then
+       - try parse message as JSON (optional). If JSON with key "temperature" then value := JSON["temperature"] else value := message
+       - call set lblValue_deviceId.Text to join value + " °C"
+       - call set lblTime_deviceId.Text to Clock.Now
+       - call Procedure AppendToHistory(deviceId, "temperature", value, Clock.Now)
+       - optionally update chartCanvas (add point)
+   - else if text contains(topic, "status") then
+       - parse JSON message for "relay" value
+       - if relay = "1" then set btnOn_deviceId.BackgroundColor = activeColor and btnOff_deviceId.BackgroundColor = inactiveColor
+       - else vice versa
+   - else handle other sensor types similarly
+
+5) btnOn_deviceId.Click
+   - if mqttConnected then
+       - payload := '{"relay":1}'
+       - call mqttClient.Publish topic join(baseTopic, "/", deviceId, "/set") message payload
+       - notifier.ShowAlert "Sent ON to " + deviceId
+     else
+       - notifier.ShowAlert "MQTT not connected"
+
+6) btnOff_deviceId.Click
+   - same as ON but payload '{"relay":0}'
+
+7) Procedure AppendToHistory(device, type, value, timestamp)
+   - key := join "history_", device, "_", type
+   - list := tinyDB_Main.GetValue key create empty list
+   - insert at position 1 value join timestamp, "|", value
+   - tinyDB_Main.StoreValue key list
+   - keys := tinyDB_Main.GetValue "history_keys" create empty list
+   - if key not in keys then add items to list keys key and tinyDB_Main.StoreValue "history_keys" keys
