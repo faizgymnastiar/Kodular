@@ -1,0 +1,5 @@
+Helper tips:
+- Use JSONTextDecode extension if you get JSON payloads; otherwise send plain values from device.
+- To find 'sistem_iot' index: loop through parts list and compare each item until match.
+- Use Clock.Now for timestamp; for nicer format, use FormatDateTime extension.
+- When creating UI for devices dynamically: you can precreate a few cards (device1, device2) or implement dynamic components extension if needed.
