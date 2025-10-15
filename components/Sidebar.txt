@@ -1,0 +1,12 @@
+Components to create (Sidebar):
+- This is a VerticalArrangement used as drawer (place on AdminDashboard top-level, Visible=false)
+- VerticalArrangement drawer: Width = 260px, BackgroundColor = #08243A, Visible = false
+  - Image (optional) avatar
+  - Label lblName: Text = "Admin"
+  - Button btnDrawerDashboard: Text = "Dashboard"
+  - Button btnDrawerHistory: Text = "History"
+  - Button btnDrawerSettings: Text = "Settings"
+  - Button btnDrawerLogout: Text = "Logout"
+Notes:
+- Toggle drawer visibility using btnMenu on AdminDashboard.
+- On Logout: tinyDB_Main.StoreValue("token","") then open LoginScreen.
