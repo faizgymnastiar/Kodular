@@ -1,0 +1,18 @@
+Components to create (LoginScreen):
+- Screen: Name = LoginScreen, Title = "Login", BackgroundColor = #0f1724
+- VerticalArrangement (AlignHorizontal: Center, Padding: 12)
+  - Label lblWelcome: Text = "Welcome", FontSize = 24, TextColor = #E6F0FF
+  - Label lblPlease: Text = "Please sign in", FontSize = 14, TextColor = #9AA7BF
+  - TextBox txtUsername: Hint = "Username", Width = 90%
+  - TextBox txtPassword: Hint = "Password", Password = true, Width = 90%
+  - Button btnLogin: Text = "Login", Width = 80%, BackgroundColor = #2563EB, TextColor = #FFFFFF, CornerRadius = 10
+  - HorizontalArrangement
+    - Button btnRegister: Text = "Register" (optional)
+    - Button btnForgot: Text = "Forgot" (optional)
+
+Non-visible (add to this screen or AppConfig screen):
+- TinyDB tinyDB_Main
+- Notifier notifier
+
+TinyDB keys used:
+- "token"  (stores login token)
